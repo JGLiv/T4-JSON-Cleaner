@@ -17,4 +17,12 @@ describe('filters', function() {
       assert.equal(1,filters.removeEmpty(1));
     });
   });
+  describe('#removeTrailingcomma()',function(){
+    it('Remove last comma in file',function(){
+      assert.equal('{"a2":{"a":true,"b":false}}',filters.removeTrailingcomma('{"a2":{"a":true,"b":false},}'));
+    });
+    it('... only if it\'s invalid JSON',function(){
+      assert.equal('{"a2":{"a":true,"b":false}}',filters.removeTrailingcomma('{"a2":{"a":true,"b":false}}'));
+    });
+  });
 });

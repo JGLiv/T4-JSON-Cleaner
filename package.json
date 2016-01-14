@@ -1,0 +1,25 @@
+{
+  "name": "t4cleaner",
+  "version": "0.0.1",
+  "description": "Node web-service to clean up T4 json feeds",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@source.liv.ac.uk:jgilbert/t4cleaner.git"
+  },
+  "keywords": [
+    "Terminal",
+    "4",
+    "json",
+    "clean"
+  ],
+  "author": "John Gilbertson <jgilbert@liverpool.ac.uk>",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "commander": "^2.9.0",
+    "mocha": "^2.3.4"
+  }
+}

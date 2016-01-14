@@ -10,4 +10,6 @@ This is a simple Node web-app to act as a proxy for mobile and web apps needing 
 
     npm init
 
+    npm test
+
     npm start -p 8080

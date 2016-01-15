@@ -25,4 +25,18 @@ describe('filters', function() {
       assert.equal('{"a2":{"a":true,"b":false}}',filters.removeTrailingcomma('{"a2":{"a":true,"b":false}}'));
     });
   });
+  describe('#unescape()',function(){
+    it('Unescape \\\\ to just \\',function(){
+      assert.equal('abc\\cde\\',filters.unescape('abc\\\\cde\\'));
+    });
+    it('Unescapes \\\' to just \'',function(){
+      assert.equal('abc\'def\'',filters.unescape('abc\\\'def\''));
+    });
+    it('Doesn\'t unescape \\\"',function(){
+      assert.equal('abc\\"def',filters.unescape('abc\\"def'));
+    });
+    it('Cleans up multiple escaped items',function(){
+      assert.equal('abc\'def\\"ghi`',filters.unescape('abc\\\'def\\"ghi\`'));
+    });
+  });
 });

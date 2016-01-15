@@ -22,17 +22,21 @@ function removeTrailingcomma(data)
   } catch(e){
     if(e.message=="Unexpected token }")
     {
-      console.log("probably trailing comma...");
       var tmp=data.slice(0,data.lastIndexOf(",")).concat(data.slice(data.lastIndexOf(',')+1,data.length));
       return tmp;
     } else {
       return data;
     }
   }
+}
 
+function unescape(data)
+{
+  return data.replace(/\\([^"\\])/g,"$1").replace(/\\\\/g,"\\");
 }
 
 module.exports={
   removeEmpty:removeEmpty,
-  removeTrailingcomma:removeTrailingcomma
+  removeTrailingcomma:removeTrailingcomma,
+  unescape:unescape
 };

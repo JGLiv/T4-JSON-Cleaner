@@ -42,6 +42,7 @@ describe('filters', function() {
   describe("#arrayify()",function(){
     it('Turn {a,b,c} to ["a","b","c"]',function(){
       assert.equal(JSON.stringify(["a","b","c"]),JSON.stringify(filters.arrayify('{a,b,c}')));
+      assert.equal(JSON.stringify(["a","b",""]),JSON.stringify(filters.arrayify('{a,b,}')));
     });
   });
   describe("Combined filters",function(){

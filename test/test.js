@@ -39,4 +39,20 @@ describe('filters', function() {
       assert.equal('abc\'def\\"ghi`',filters.unescape('abc\\\'def\\"ghi\`'));
     });
   });
+  describe("Combined filters",function(){
+    it("Turns bad JSON to good",function(){
+      var input='{"a123":{"text":"abc\\"\'"},"a1":{"text":""},}';
+      var one=filters.unescape(input);
+      var two=filters.removeTrailingcomma(one);
+      var three=filters.removeEmpty(JSON.parse(two));
+      assert.equal('{"a123":{"text":"abc\\"\'"},"a1":{"text":""},}',one);
+      assert.equal('{"a123":{"text":"abc\\"\'"},"a1":{"text":""}}',two);
+      assert.equal('{"a123":{"text":"abc\\"\'"}}',JSON.stringify(three));
+    });
+    it("... automatically",function(){
+      var input='{"a123":{"text":"abc\\"\'"},"a1":{"text":""},}';
+      var out='{"a123":{"text":"abc\\"\'"}}';
+      assert.equal(out,JSON.stringify(filters.combined(input)));
+    });
+  });
 });

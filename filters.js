@@ -9,7 +9,7 @@ function removeEmpty(data,id)
   try{
     delete data[id];
   } catch(e){
-
+    console.error(e);
   }
   return data;
 }
@@ -35,8 +35,18 @@ function unescape(data)
   return data.replace(/\\([^"\\])/g,"$1").replace(/\\\\/g,"\\");
 }
 
+function combined(data)
+{
+  try{
+    return removeEmpty(JSON.parse(removeTrailingcomma(unescape(data))));
+  }catch(e){
+    return data;
+  }
+}
+
 module.exports={
   removeEmpty:removeEmpty,
   removeTrailingcomma:removeTrailingcomma,
-  unescape:unescape
+  unescape:unescape,
+  combined:combined
 };

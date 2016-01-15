@@ -44,9 +44,15 @@ function combined(data)
   }
 }
 
+function arrayify(data)
+{
+  return data.replace(/[{}]/g,"").split(",");
+}
+
 module.exports={
   removeEmpty:removeEmpty,
   removeTrailingcomma:removeTrailingcomma,
   unescape:unescape,
-  combined:combined
+  combined:combined,
+  arrayify:arrayify
 };

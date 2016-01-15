@@ -39,6 +39,11 @@ describe('filters', function() {
       assert.equal('abc\'def\\"ghi`',filters.unescape('abc\\\'def\\"ghi\`'));
     });
   });
+  describe("#arrayify()",function(){
+    it('Turn {a,b,c} to ["a","b","c"]',function(){
+      assert.equal(JSON.stringify(["a","b","c"]),JSON.stringify(filters.arrayify('{a,b,c}')));
+    });
+  });
   describe("Combined filters",function(){
     it("Turns bad JSON to good",function(){
       var input='{"a123":{"text":"abc\\"\'"},"a1":{"text":""},}';

@@ -37,10 +37,10 @@ function handler(req,resp) {
       resp.end("JSON files only");
     } else {
       var data="";
-      res.on('data', (chunk) => {
+      res.on('data', function(chunk){
         data+=chunk.toString();
       });
-      res.on('end', () => {
+      res.on('end', function() {
         if(param.combined)
         {
           data=filters.combined(data);

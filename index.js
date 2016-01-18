@@ -15,9 +15,10 @@ const url=require('url');
 opts
   .version(pkg.version)
   .option('-p, --port [8080]','Port to listen on (default: 8080)',parseInt)
-  .option('-k, --key [file]',"(optional) private key")
-  .option('-c, --cert [file]','(optional) SSL certificate + chain')
+  .option('-k, --key [file.p12]',"(optional) .p12 file for ssl key/cert")
+  .option('-c, --cred [file.json]','(optional) JSON file with credentials for key/cert')
   .parse(process.argv);
+
 
 const port=opts.port||8080;
 //console.log(`Port:${port}`);
@@ -65,7 +66,8 @@ function handler(req,resp) {
 }
 
 if(opts.key && opts.cert){
-  let server=https.createServer({key: fs.readFileSync(opts.key),cert: fs.readFileSync(opts.cert)},handler).listen(port);
+  let httpsOptions={pfx:fs.readFileSync(opts.key),passphrase:require(opts.cred).passphrase};
+  let server=https.createServer(httpsOptions,handler).listen(port);
 }
 else {
   let server=http.createServer(handler).listen(port);

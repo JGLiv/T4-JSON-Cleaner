@@ -67,7 +67,7 @@ function handler(req,resp) {
 
 if(opts.key && opts.cred){
   console.log("Sarting secure");
-  let httpsOptions={pfx:fs.readFileSync(opts.key),passphrase:require(opts.cred).passphrase};
+  let httpsOptions={pfx:fs.readFileSync("./"+opts.key),passphrase:require("./"+opts.cred).passphrase};
   let server=https.createServer(httpsOptions,handler).listen(port);
 }
 else {

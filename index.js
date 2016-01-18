@@ -31,6 +31,17 @@ function handler(req,resp) {
   } catch(e){
     console.log(new Date(),req.connection.remoteAddress,null,file);
   }
+  resp.setHeader("Access-Control-Allow-Origin","*");
+  if(file=="/")
+  {
+    urlGen(req,resp);
+    return;
+  }
+  if(file=="/filters.js")
+  {
+    console.log("Sending filters");
+    fs.createReadStream("./filters.js").pipe(resp);
+  }
   const param=inUrl.query;
   https.get("https://www.liverpool.ac.uk"+file,function(res){
     //console.log(res.headers);
@@ -63,6 +74,10 @@ function handler(req,resp) {
       });
     }
   });
+}
+
+function urlGen(req,resp){
+  fs.createReadStream("./index.html").pipe(resp);
 }
 
 if(opts.key && opts.cred){

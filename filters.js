@@ -49,10 +49,13 @@ function arrayify(data)
   return data.replace(/[{}]/g,"").split(",");
 }
 
-module.exports={
-  removeEmpty:removeEmpty,
-  removeTrailingcomma:removeTrailingcomma,
-  unescape:unescape,
-  combined:combined,
-  arrayify:arrayify
-};
+if(typeof window === "undefined")
+{
+  module.exports={
+    removeEmpty:removeEmpty,
+    removeTrailingcomma:removeTrailingcomma,
+    unescape:unescape,
+    combined:combined,
+    arrayify:arrayify
+  };
+}

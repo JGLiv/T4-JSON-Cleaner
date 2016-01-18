@@ -31,7 +31,7 @@ function handler(req,resp) {
     console.log(new Date(),req.connection.remoteAddress,null,file);
   }
   const param=inUrl.query;
-  https.get("https://www.liverpool.ac.uk"+file,res=>{
+  https.get("https://www.liverpool.ac.uk"+file,function(res){
     //console.log(res.headers);
     if(!file.match(/\.json$/) && !res.headers["content-type"].match(/json/g)){
       resp.end("JSON files only");

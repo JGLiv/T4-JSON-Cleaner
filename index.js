@@ -55,7 +55,7 @@ function handler(req,resp) {
       res.on('end', function() {
         if(param.combined)
         {
-          data=filters.combined(data);
+          data=JSON.stringify(filters.combined(data));
         }
         if(param.unescape) {
           data=filters.unescape(data);
@@ -69,6 +69,7 @@ function handler(req,resp) {
         if(param.removeEmpty) {
           data=JSON.stringify(filters.removeEmpty(JSON.parse(data)));
         }
+        console.log("data",data);
         resp.setHeader("Content-type","application/json");
         resp.end(data);
       });
@@ -86,5 +87,6 @@ if(opts.key && opts.cred){
   let server=https.createServer(httpsOptions,handler).listen(port);
 }
 else {
+  console.log("Starting insecure");
   let server=http.createServer(handler).listen(port);
 }

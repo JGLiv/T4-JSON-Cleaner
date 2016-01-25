@@ -1,10 +1,13 @@
 //jshint esnext:true
 //jshint node:true
+//jshint mocha:true
+
+'use strict';
 
 var assert = require('assert');
 var http=require('http');
 var filters=require('../filters');
-var main=require('../index');
+var main=require('../server');
 var request=require('request');
 
 describe('filters', function() {
@@ -71,11 +74,14 @@ describe('filters', function() {
 
 describe('Server',function(){
   var server=null;
+  var remoteServer;
   var departments='{Ancient History,Archaeology,Architecture,Chemistry,Classics and Classical Studies,Combined Honours - BA and BSc Programmes,Communication and Media,Computer Science,Dentistry,Diagnostic Radiography,Earth Sciences,Ecology and Marine Biology,Egyptology,Electrical Engineering and Electronics,Engineering,English,Environmental Science,Evolutionary Anthropology,Geography,Geography with Oceanography/Geology,Health Sciences,Heritage Studies,History,Honours Select,Irish Studies,Italian,Law,Life Sciences,Management School,Mathematical Sciences,Medicine,Modern Languages and Cultures,Music,Nursing,Occupational Therapy,Ocean Sciences,Orthoptics,Philosophy,Physics,Physiotherapy,Planning,Politics,Psychology,Radiotherapy,Sociology, Social Policy and Criminology,Veterinary Science,Placeholder}';
-  this.timeout(10000);
+  var departmentsArrayified='["Ancient History","Archaeology","Architecture","Chemistry","Classics and Classical Studies","Combined Honours - BA and BSc Programmes","Communication and Media","Computer Science","Dentistry","Diagnostic Radiography","Earth Sciences","Ecology and Marine Biology","Egyptology","Electrical Engineering and Electronics","Engineering","English","Environmental Science","Evolutionary Anthropology","Geography","Geography with Oceanography/Geology","Health Sciences","Heritage Studies","History","Honours Select","Irish Studies","Italian","Law","Life Sciences","Management School","Mathematical Sciences","Medicine","Modern Languages and Cultures","Music","Nursing","Occupational Therapy","Ocean Sciences","Orthoptics","Philosophy","Physics","Physiotherapy","Planning","Politics","Psychology","Radiotherapy","Sociology"," Social Policy and Criminology","Veterinary Science","Placeholder"]';
+  this.timeout(2000);
 
   before(function(){
-    server=http.createServer(main.handler).listen(12349);
+    remoteServer=http.createServer(remote).listen(12348);
+    server=main.startServer({port:12349,remote:'http://localhost:12348/'});
   });
 
 
@@ -98,7 +104,7 @@ describe('Server',function(){
     });
   });
   it('Responds with 404 when requesting a non-existant file',function(done){
-    request('http://localhost:12349/test.html',(err,res,body)=>{
+    request('http://localhost:12349/404.html',(err,res,body)=>{
       if(err){
         done(err);
       }
@@ -107,7 +113,7 @@ describe('Server',function(){
     });
   });
   it('Responds with 404 when requesting an existant non-JSON file',function(done){
-    request('http://localhost:12349/about/',function(err,res,body){
+    request('http://localhost:12349/test.html',function(err,res,body){
       if(err){
         done(err);
       }
@@ -116,7 +122,7 @@ describe('Server',function(){
     });
   });
   it('Responds with original file when no filters are applied',function(done){
-    request('http://localhost:12349/app-data/open-days-app/data-feeds/departments.json',function(err,res,body){
+    request('http://localhost:12349/departments.json',function(err,res,body){
       if(err){
         done(err);
       }
@@ -124,7 +130,40 @@ describe('Server',function(){
       done();
     });
   });
+  it('Responds with array-ify fixed version when requested',function(done){
+    request('http://localhost:12349/departments.json?arrayify=true',function(err,res,body){
+      if(err){
+        done(err);
+      }
+      assert.equal(departmentsArrayified,body);
+      done();
+    });
+  });
   after(function(){
     server.close();
   });
 });
+
+function remote(req,resp)
+{
+  var departments='{Ancient History,Archaeology,Architecture,Chemistry,Classics and Classical Studies,Combined Honours - BA and BSc Programmes,Communication and Media,Computer Science,Dentistry,Diagnostic Radiography,Earth Sciences,Ecology and Marine Biology,Egyptology,Electrical Engineering and Electronics,Engineering,English,Environmental Science,Evolutionary Anthropology,Geography,Geography with Oceanography/Geology,Health Sciences,Heritage Studies,History,Honours Select,Irish Studies,Italian,Law,Life Sciences,Management School,Mathematical Sciences,Medicine,Modern Languages and Cultures,Music,Nursing,Occupational Therapy,Ocean Sciences,Orthoptics,Philosophy,Physics,Physiotherapy,Planning,Politics,Psychology,Radiotherapy,Sociology, Social Policy and Criminology,Veterinary Science,Placeholder}';
+  //console.log("test server:",req.url);
+  if(req.url=="/departments.json")
+  {
+    resp.setHeader('Content-type','application/json');
+    resp.statusCode=200;
+    resp.end(departments);
+    //console.log("Sent departments");
+  }else if(req.url=="/test.html"){
+    resp.statusCode=200;
+    resp.setHeader('Content-type','text/html');
+    resp.end("<html><body>hi</body></html>");
+  }else if(req.url=="json.html"){
+    resp.setHeader('Content-type','application/json');
+    resp.end(JSON.stringify({response:'ok'}));
+  }else{
+    resp.responseCode=404;
+    resp.setHeader('Content-type','text/html');
+    resp.end("No");
+  }
+}

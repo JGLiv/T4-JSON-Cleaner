@@ -21,10 +21,10 @@
   "license": "GPL-3.0",
   "dependencies": {
     "commander": "^2.9.0",
-    "mocha": "^2.3.4",
-    "url-join": "0.0.1"
+    "url-join": "0.0.1",
+    "request": "^2.67.0"
   },
   "devDependencies": {
-    "request": "^2.67.0"
+    "mocha": "^2.3.4"
   }
 }

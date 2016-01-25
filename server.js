@@ -59,8 +59,7 @@ function handler(req,resp) {
       resp.statusCode=404;
       resp.end("JSON files only");
     } else {
-      if(param.combined)
-      {
+      if(typeof param.combined!=='undefined'){
         let origData=data;
         try{
           data=JSON.stringify(filters.combined(data));
@@ -68,7 +67,7 @@ function handler(req,resp) {
           data=origData;
         }
       }
-      if(param.unescape) {
+      if(typeof param.unescape!=='undefined') {
         let origData=data;
         try{
           data=filters.unescape(data);
@@ -76,7 +75,7 @@ function handler(req,resp) {
           data=origData;
         }
       }
-      if(param.removeTrailingcomma) {
+      if(typeof param.removeTrailingcomma!=='undefined') {
         let origData=data;
         try{
           data=filters.removeTrailingcomma(data);
@@ -84,7 +83,7 @@ function handler(req,resp) {
           data=origData;
         }
       }
-      if(param.arrayify) {
+      if(typeof param.arrayify!=='undefined'){
         let origData=data;
         try{
           data=JSON.stringify(filters.arrayify(data));
@@ -92,15 +91,14 @@ function handler(req,resp) {
           data=origData;
         }
       }
-      if(param.removeEmpty) {
+      if(typeof param.removeEmpty!=='undefined'){
         let origData=data;
         try{
-          data=JSON.stringify(filters.removeEmpty(JSON.parse(data)));
+          data=JSON.stringify(filters.removeEmpty(JSON.parse(data),param.removeEmpty));
         }catch(e){
           data=origData;
         }
       }
-      //console.log("data",data);
       resp.setHeader("Content-type","application/json");
       resp.end(data);
     }

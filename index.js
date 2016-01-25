@@ -26,13 +26,13 @@ const port=opts.port||8080;
 function handler(req,resp) {
   const inUrl=url.parse(req.url,true);
   const file=inUrl.pathname;
-  try{
+  /*try{
     console.log(new Date(),req.connection.remoteAddress,req.header['x-forwarded-for'],file);
   } catch(e){
     console.log(new Date(),req.connection.remoteAddress,null,file);
-  }
+  }*/
   resp.setHeader("Access-Control-Allow-Origin","*");
-  if(file=="/")
+  if(file=="/" || file=="/index.html")
   {
     urlGen(req,resp);
     return;
@@ -46,6 +46,7 @@ function handler(req,resp) {
   https.get("https://www.liverpool.ac.uk"+file,function(res){
     //console.log(res.headers);
     if(!file.match(/\.json$/) && !res.headers["content-type"].match(/json/g)){
+      resp.statusCode=404;
       resp.end("JSON files only");
     } else {
       var data="";
@@ -94,7 +95,7 @@ function handler(req,resp) {
             data=origData;
           }
         }
-        console.log("data",data);
+        //console.log("data",data);
         resp.setHeader("Content-type","application/json");
         resp.end(data);
       });
@@ -106,12 +107,20 @@ function urlGen(req,resp){
   fs.createReadStream("./index.html").pipe(resp);
 }
 
-if(opts.key && opts.cred){
-  console.log("Sarting secure");
-  let httpsOptions={pfx:fs.readFileSync("./"+opts.key),passphrase:require("./"+opts.cred).passphrase};
-  let server=https.createServer(httpsOptions,handler).listen(port);
+let server=null;
+
+if(!process.argv[1].match(/mocha/)){ //not running inside test
+  if(opts.key && opts.cred){
+    console.log("Sarting secure port",port);
+    let httpsOptions={pfx:fs.readFileSync("./"+opts.key),passphrase:require("./"+opts.cred).passphrase};
+    server=https.createServer(httpsOptions,handler).listen(port);
+  }
+  else {
+    console.log("Starting insecure port",port);
+    server=http.createServer(handler).listen(port);
+  }
 }
-else {
-  console.log("Starting insecure");
-  let server=http.createServer(handler).listen(port);
-}
+
+module.exports={
+  handler:handler,
+};

@@ -1,5 +1,11 @@
+//jshint esnext:true
+//jshint node:true
+
 var assert = require('assert');
+var http=require('http');
 var filters=require('../filters');
+var main=require('../index');
+var request=require('request');
 
 describe('filters', function() {
   describe('#removeEmpty()', function () {
@@ -60,5 +66,65 @@ describe('filters', function() {
       var out='{"a123":{"text":"abc\\"\'"}}';
       assert.equal(out,JSON.stringify(filters.combined(input)));
     });
+  });
+});
+
+describe('Server',function(){
+  var server=null;
+  var departments='{Ancient History,Archaeology,Architecture,Chemistry,Classics and Classical Studies,Combined Honours - BA and BSc Programmes,Communication and Media,Computer Science,Dentistry,Diagnostic Radiography,Earth Sciences,Ecology and Marine Biology,Egyptology,Electrical Engineering and Electronics,Engineering,English,Environmental Science,Evolutionary Anthropology,Geography,Geography with Oceanography/Geology,Health Sciences,Heritage Studies,History,Honours Select,Irish Studies,Italian,Law,Life Sciences,Management School,Mathematical Sciences,Medicine,Modern Languages and Cultures,Music,Nursing,Occupational Therapy,Ocean Sciences,Orthoptics,Philosophy,Physics,Physiotherapy,Planning,Politics,Psychology,Radiotherapy,Sociology, Social Policy and Criminology,Veterinary Science,Placeholder}';
+  this.timeout(10000);
+
+  before(function(){
+    server=http.createServer(main.handler).listen(12349);
+  });
+
+
+  it('Responds with index page when requesting /',function(done){
+    request('http://localhost:12349/',(err,res,body)=>{
+      if(err){
+        done(err);
+      }
+      assert.equal(200,res.statusCode);
+      done();
+    });
+  });
+  it('Responds with index page when requesting /index.html',function(done){
+    request('http://localhost:12349/index.html',(err,res,body)=>{
+      if(err){
+        done(err);
+      }
+      assert.equal(200,res.statusCode);
+      done();
+    });
+  });
+  it('Responds with 404 when requesting a non-existant file',function(done){
+    request('http://localhost:12349/test.html',(err,res,body)=>{
+      if(err){
+        done(err);
+      }
+      assert.equal(404,res.statusCode);
+      done();
+    });
+  });
+  it('Responds with 404 when requesting an existant non-JSON file',function(done){
+    request('http://localhost:12349/about/',function(err,res,body){
+      if(err){
+        done(err);
+      }
+      assert.equal(404,res.statusCode);
+      done();
+    });
+  });
+  it('Responds with original file when no filters are applied',function(done){
+    request('http://localhost:12349/app-data/open-days-app/data-feeds/departments.json',function(err,res,body){
+      if(err){
+        done(err);
+      }
+      assert.equal(departments,body);
+      done();
+    });
+  });
+  after(function(){
+    server.close();
   });
 });

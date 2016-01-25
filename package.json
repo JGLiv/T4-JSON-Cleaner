@@ -22,5 +22,8 @@
   "dependencies": {
     "commander": "^2.9.0",
     "mocha": "^2.3.4"
+  },
+  "devDependencies": {
+    "request": "^2.67.0"
   }
 }

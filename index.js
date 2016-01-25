@@ -55,19 +55,44 @@ function handler(req,resp) {
       res.on('end', function() {
         if(param.combined)
         {
-          data=JSON.stringify(filters.combined(data));
+          let origData=data;
+          try{
+            data=JSON.stringify(filters.combined(data));
+          }catch(e){
+            data=origData;
+          }
         }
         if(param.unescape) {
-          data=filters.unescape(data);
+          let origData=data;
+          try{
+            data=filters.unescape(data);
+          }catch(e){
+            data=origData;
+          }
         }
         if(param.removeTrailingcomma) {
-          data=filters.removeTrailingcomma(data);
+          let origData=data;
+          try{
+            data=filters.removeTrailingcomma(data);
+          }catch(e){
+            data=origData;
+          }
         }
         if(param.arrayify) {
-          data=JSON.stringify(filters.arrayify(data));
+          let origData=data;
+          try{
+            data=JSON.stringify(filters.arrayify(data));
+          }catch(e){
+            data=origData;
+          }
         }
         if(param.removeEmpty) {
-          data=JSON.stringify(filters.removeEmpty(JSON.parse(data)));
+          let origData=data;
+          try{
+            data=JSON.stringify(filters.removeEmpty(JSON.parse(data)));
+          }catch(e){
+            data=origData;
+          }
         }
         console.log("data",data);
         resp.setHeader("Content-type","application/json");

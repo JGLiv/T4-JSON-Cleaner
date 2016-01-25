@@ -10,6 +10,14 @@ var filters=require('../filters');
 var main=require('../server');
 var request=require('request');
 
+
+var departments='{Ancient History,Archaeology,Architecture,Chemistry,Classics and Classical Studies,Combined Honours - BA and BSc Programmes,Communication and Media,Computer Science,Dentistry,Diagnostic Radiography,Earth Sciences,Ecology and Marine Biology,Egyptology,Electrical Engineering and Electronics,Engineering,English,Environmental Science,Evolutionary Anthropology,Geography,Geography with Oceanography/Geology,Health Sciences,Heritage Studies,History,Honours Select,Irish Studies,Italian,Law,Life Sciences,Management School,Mathematical Sciences,Medicine,Modern Languages and Cultures,Music,Nursing,Occupational Therapy,Ocean Sciences,Orthoptics,Philosophy,Physics,Physiotherapy,Planning,Politics,Psychology,Radiotherapy,Sociology, Social Policy and Criminology,Veterinary Science,Placeholder}';
+var departmentsArrayified='["Ancient History","Archaeology","Architecture","Chemistry","Classics and Classical Studies","Combined Honours - BA and BSc Programmes","Communication and Media","Computer Science","Dentistry","Diagnostic Radiography","Earth Sciences","Ecology and Marine Biology","Egyptology","Electrical Engineering and Electronics","Engineering","English","Environmental Science","Evolutionary Anthropology","Geography","Geography with Oceanography/Geology","Health Sciences","Heritage Studies","History","Honours Select","Irish Studies","Italian","Law","Life Sciences","Management School","Mathematical Sciences","Medicine","Modern Languages and Cultures","Music","Nursing","Occupational Therapy","Ocean Sciences","Orthoptics","Philosophy","Physics","Physiotherapy","Planning","Politics","Psychology","Radiotherapy","Sociology"," Social Policy and Criminology","Veterinary Science","Placeholder"]';
+var multiBad='{"abc":{"text":"Hello world"},"bcd":{"text":"Bad text\\\'s"},"a1":{"text":"placeholder"}}';
+var multiBadUnescape='{"abc":{"text":"Hello world"},"bcd":{"text":"Bad text\'s"},"a1":{"text":"placeholder"}}';
+var multibadUnescapeRemoveEmpty='{"abc":{"text":"Hello world"},"bcd":{"text":"Bad text\'s"}}';
+
+
 describe('filters', function() {
   describe('#removeEmpty()', function () {
     it('Remove specified empty JSON value', function () {
@@ -75,8 +83,6 @@ describe('filters', function() {
 describe('Server',function(){
   var server=null;
   var remoteServer;
-  var departments='{Ancient History,Archaeology,Architecture,Chemistry,Classics and Classical Studies,Combined Honours - BA and BSc Programmes,Communication and Media,Computer Science,Dentistry,Diagnostic Radiography,Earth Sciences,Ecology and Marine Biology,Egyptology,Electrical Engineering and Electronics,Engineering,English,Environmental Science,Evolutionary Anthropology,Geography,Geography with Oceanography/Geology,Health Sciences,Heritage Studies,History,Honours Select,Irish Studies,Italian,Law,Life Sciences,Management School,Mathematical Sciences,Medicine,Modern Languages and Cultures,Music,Nursing,Occupational Therapy,Ocean Sciences,Orthoptics,Philosophy,Physics,Physiotherapy,Planning,Politics,Psychology,Radiotherapy,Sociology, Social Policy and Criminology,Veterinary Science,Placeholder}';
-  var departmentsArrayified='["Ancient History","Archaeology","Architecture","Chemistry","Classics and Classical Studies","Combined Honours - BA and BSc Programmes","Communication and Media","Computer Science","Dentistry","Diagnostic Radiography","Earth Sciences","Ecology and Marine Biology","Egyptology","Electrical Engineering and Electronics","Engineering","English","Environmental Science","Evolutionary Anthropology","Geography","Geography with Oceanography/Geology","Health Sciences","Heritage Studies","History","Honours Select","Irish Studies","Italian","Law","Life Sciences","Management School","Mathematical Sciences","Medicine","Modern Languages and Cultures","Music","Nursing","Occupational Therapy","Ocean Sciences","Orthoptics","Philosophy","Physics","Physiotherapy","Planning","Politics","Psychology","Radiotherapy","Sociology"," Social Policy and Criminology","Veterinary Science","Placeholder"]';
   this.timeout(2000);
 
   before(function(){
@@ -139,6 +145,49 @@ describe('Server',function(){
       done();
     });
   });
+  it('Responds with unescaped version when requested',function(done){
+    request('http://localhost:12349/multibad.json?unescape',(err,res,body)=>{
+      if(err){
+        done(err);
+      }
+      assert.equal(200,res.statusCode);
+      assert.equal(multiBadUnescape,body);
+      done();
+    });
+
+  });
+  it('Responds with original file if filter doesn\'t work',function(done){
+    request('http://localhost:12349/multibad.json?removeEmpty',(err,res,body)=>{
+      if(err){
+        done(err);
+      }
+      assert.equal(200,res.statusCode);
+      assert.equal(multiBad,body);
+      done();
+    });
+  });
+  it('Applies filters in internal order',function(done){
+    // if it did removeEmpty first, it would fail, but still then do unescape,
+    // resulting in valid JSON, but with the placeholder still intact
+    request('http://localhost:12349/multibad.json?removeEmpty=a1&unescape',(err,res,body)=>{
+      if(err){
+        done(err);
+      }
+      assert.equal(200,res.statusCode);
+      assert.equal(multibadUnescapeRemoveEmpty,body);
+      done();
+    });
+  });
+  it('Uses default value for removeEmpty',function(done){
+    request('http://localhost:12349/multibad.json?removeEmpty&unescape',(err,res,body)=>{
+      if(err){
+        done(err);
+      }
+      assert.equal(200,res.statusCode);
+      assert.equal(multibadUnescapeRemoveEmpty,body);
+      done();
+    });
+  });
   after(function(){
     server.close();
   });
@@ -146,14 +195,16 @@ describe('Server',function(){
 
 function remote(req,resp)
 {
-  var departments='{Ancient History,Archaeology,Architecture,Chemistry,Classics and Classical Studies,Combined Honours - BA and BSc Programmes,Communication and Media,Computer Science,Dentistry,Diagnostic Radiography,Earth Sciences,Ecology and Marine Biology,Egyptology,Electrical Engineering and Electronics,Engineering,English,Environmental Science,Evolutionary Anthropology,Geography,Geography with Oceanography/Geology,Health Sciences,Heritage Studies,History,Honours Select,Irish Studies,Italian,Law,Life Sciences,Management School,Mathematical Sciences,Medicine,Modern Languages and Cultures,Music,Nursing,Occupational Therapy,Ocean Sciences,Orthoptics,Philosophy,Physics,Physiotherapy,Planning,Politics,Psychology,Radiotherapy,Sociology, Social Policy and Criminology,Veterinary Science,Placeholder}';
-  //console.log("test server:",req.url);
   if(req.url=="/departments.json")
   {
     resp.setHeader('Content-type','application/json');
     resp.statusCode=200;
     resp.end(departments);
     //console.log("Sent departments");
+  }else if(req.url=="/multibad.json"){
+    resp.setHeader('Content-type','application/json');
+    resp.statusCode=200;
+    resp.end(multiBad);
   }else if(req.url=="/test.html"){
     resp.statusCode=200;
     resp.setHeader('Content-type','text/html');

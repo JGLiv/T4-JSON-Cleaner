@@ -109,7 +109,34 @@ describe('Server',function(){
       done();
     });
   });
-  it('Responds with 404 when requesting a non-existant file',function(done){
+  it('Responds with filters.js when requested',function(done){
+    request('http://localhost:12349/filters.js',(err,res,body)=>{
+      if(err){
+        done(err);
+      }
+      assert.equal(200,res.statusCode);
+      done();
+    });
+  });
+  it('Responds with browser.js when requested',function(done){
+    request('http://localhost:12349/browser.js',(err,res,body)=>{
+      if(err){
+        done(err);
+      }
+      assert.equal(200,res.statusCode);
+      done();
+    });
+  });
+  it('Responds with 404 when requesting a non-existant JSON file',function(done){
+    request('http://localhost:12349/404.json',(err,res,body)=>{
+      if(err){
+        done(err);
+      }
+      assert.equal(404,res.statusCode);
+      done();
+    });
+  });
+  it('Responds with 404 when requesting a non-existant non-JSON file',function(done){
     request('http://localhost:12349/404.html',(err,res,body)=>{
       if(err){
         done(err);
@@ -213,7 +240,7 @@ function remote(req,resp)
     resp.setHeader('Content-type','application/json');
     resp.end(JSON.stringify({response:'ok'}));
   }else{
-    resp.responseCode=404;
+    resp.statusCode=404;
     resp.setHeader('Content-type','text/html');
     resp.end("No");
   }

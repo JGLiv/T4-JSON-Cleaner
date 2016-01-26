@@ -49,13 +49,18 @@ function handler(req,resp) {
   }
   if(file=="/filters.js")
   {
-    console.log("Sending filters");
     fs.createReadStream("./filters.js").pipe(resp);
+  }
+  if(file=="/browser.js"){
+    fs.createReadStream('./browser.js').pipe(resp);
   }
   const param=inUrl.query;
   request(urlJoin(options.remote,file),function(err,res,data){
-    //console.log(res.headers);
-    if(!file.match(/\.json$/) && !res.headers["content-type"].match(/json/g)){
+    if(err){
+      resp.statusCode=404;
+      resp.end(err);
+    }
+    if((!file.match(/\.json$/) && !res.headers["content-type"].match(/json/g)) || res.statusCode!==200){
       resp.statusCode=404;
       resp.end("JSON files only");
     } else {
@@ -106,7 +111,10 @@ function handler(req,resp) {
 }
 
 function urlGen(req,resp){
-  fs.createReadStream("./index.html").pipe(resp);
+  fs.readFile("./index.html",function(err,data){
+    data=data.toString().replace(/#base#/g,urlJoin(options.remote,"/"));
+    resp.end(data);
+  });
 }
 
 module.exports={

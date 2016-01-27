@@ -21,13 +21,14 @@ var multibadUnescapeRemoveEmpty='{"abc":{"text":"Hello world"},"bcd":{"text":"Ba
 describe('filters', function() {
   describe('#removeEmpty()', function () {
     it('Remove specified empty JSON value', function () {
-      assert.equal(JSON.stringify(filters.removeEmpty({a1:'test',a3:''},"a3")),JSON.stringify({a1:'test'}));
+      //assert.equal(JSON.stringify(filters.removeEmpty({a1:'test',a3:''},"a3")),JSON.stringify({a1:'test'}));
+      assert.deepEqual(filters.removeEmpty({a1:'test',a3:''},"a3"),{a1:'test'});
     });
     it('Remove default JSON value' ,function(){
-      assert.equal(JSON.stringify(filters.removeEmpty({a2:'test',a1:''})),JSON.stringify({a2:'test'}));
+      assert.deepEqual(filters.removeEmpty({a2:'test',a1:''}),{a2:'test'});
     });
     it('Return original object if specified entry doesnt exist',function(){
-      assert.equal(JSON.stringify(filters.removeEmpty({a2:'test'})),JSON.stringify({a2:'test'}));
+      assert.deepEqual(filters.removeEmpty({a2:'test'}),{a2:'test'});
     });
     it('Returns original data, for invalid input',function(){
       assert.equal(filters.removeEmpty("invalid"),"invalid");
@@ -58,8 +59,8 @@ describe('filters', function() {
   });
   describe("#arrayify()",function(){
     it('Turn {a,b,c} to ["a","b","c"]',function(){
-      assert.equal(JSON.stringify(filters.arrayify('{a,b,c}')),JSON.stringify(["a","b","c"]));
-      assert.equal(JSON.stringify(filters.arrayify('{a,b,}')),JSON.stringify(["a","b",""]));
+      assert.deepEqual(filters.arrayify('{a,b,c}'),["a","b","c"]);
+      assert.deepEqual(filters.arrayify('{a,b,}'),["a","b",""]);
     });
   });
   describe("Combined filters",function(){

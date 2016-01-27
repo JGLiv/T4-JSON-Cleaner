@@ -50,9 +50,11 @@ function handler(req,resp) {
   if(file=="/filters.js")
   {
     fs.createReadStream("./filters.js").pipe(resp);
+    return;
   }
   if(file=="/browser.js"){
     fs.createReadStream('./browser.js').pipe(resp);
+    return;
   }
   const param=inUrl.query;
   request(urlJoin(options.remote,file),function(err,res,data){

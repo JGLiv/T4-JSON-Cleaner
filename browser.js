@@ -3,6 +3,7 @@
 
 function fetch(url)
 {
+  window.remoteFile=url;
   removeClass(document.querySelector("#step2"),"hidden");
   addClass(document.getElementById('step2'),"hidden");
   var request = new XMLHttpRequest();
@@ -18,7 +19,7 @@ function fetch(url)
         document.getElementById('output').innerHTML=location.href+url;
         removeClass(document.getElementById('step9'),"hidden");
       }catch(e){
-        err("Invalid JSON! \"<code>"+e.message+"</code>\"",request.responseText);
+        err("Invalid JSON! \"<code>"+e.message+"</code>\"",request.responseText.slice(0,100));
         removeClass(document.querySelector("#step2"),"hidden");
       }
     } else {
@@ -56,12 +57,28 @@ function addClass(el,cl)
 
 function testFilters()
 {
+  removeClass(document.getElementById('filterTest'),'hidden');
   Object.keys(module.exports).forEach(function(fn){
     try{
       var newData=module.exports[fn](origData);
-      if(typeof newData != "string")
+      if(newData!==origData)
       {
-        console.log("new:",newData);
+        if(Array.isArray(newData))
+        {
+          document.getElementById('filterOutBody').innerHTML+='<tr><td>'+fn+'</td><td class="ovf">'+JSON.stringify(newData).slice(0,300)+'</td></tr><tr><td></td><td>Try me:<a target="_new" href="'+location.href+window.remoteFile+'?'+fn+'">'+location.href+window.remoteFile+'?'+fn+'</a></td></tr>';
+          console.log("new:",newData);
+        }
+        else if(typeof newData === "object")
+        {
+          document.getElementById('filterOutBody').innerHTML+='<tr><td>'+fn+'</td><td class="ovf">'+JSON.stringify(newData).slice(0,300)+'</td></tr><tr><td></td><td>Try me:<a target="_new" href="'+location.href+window.remoteFile+'?'+fn+'">'+location.href+window.remoteFile+'?'+fn+'</a></td></tr>';
+          console.log("new:",newData);
+        }
+        else if(typeof newData === 'string')
+        {
+          var realNewData=JSON.parse(newData);
+          document.getElementById('filterOutBody').innerHTML+='<tr><td>'+fn+'</td><td class="ovf">'+newData.slice(0,300)+'</td></tr><tr><td></td><td>Try me:<a target="_new" href="'+location.href+window.remoteFile+'?'+fn+'">'+location.href+window.remoteFile+'?'+fn+'</a></td></tr>';
+          console.log("new:",newData);
+        }
       }
     }catch(e){
       console.error(e);

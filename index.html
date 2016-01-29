@@ -4,6 +4,8 @@
     <style>
       .hidden { display: none; }
       .step { margin: 10px; }
+      table { table-layout:fixed; }
+      .ovf { overflow: hidden; white-space: nowrap }
     </style>
     <script src="filters.js"></script>
     <script src="browser.js"></script>
@@ -30,6 +32,11 @@
   <div class="step hidden" id="step2">
     <div id="jsonout"></div>
     <button name="testFilters" id="testFilters" onclick="testFilters()">Test filters</button>
+  </div>
+  <div class="step hidden" id="filterTest">
+    <table width="80%"><thead><th width="20%">Possible Filters</th><th width="80%">Output</th></thead>
+      <tbody id="filterOutBody"></tbody>
+    </table>
   </div>
   <div class="step hidden" id="step9">
     <div>URL to use: <span id="output"></span></div>

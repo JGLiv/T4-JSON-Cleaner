@@ -56,5 +56,16 @@ function addClass(el,cl)
 
 function testFilters()
 {
+  Object.keys(module.exports).forEach(function(fn){
+    try{
+      var newData=module.exports[fn](origData);
+      if(typeof newData != "string")
+      {
+        console.log("new:",newData);
+      }
+    }catch(e){
+      console.error(e);
+    }
+  });
 
 }

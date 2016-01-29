@@ -49,13 +49,14 @@ function arrayify(data)
   return data.replace(/[{}]/g,"").split(",");
 }
 
-if(typeof window === "undefined")
-{
-  module.exports={
-    removeEmpty:removeEmpty,
-    removeTrailingcomma:removeTrailingcomma,
-    unescape:unescape,
-    combined:combined,
-    arrayify:arrayify
-  };
+if(typeof module == "undefined"){
+  var module={}; //jshint ignore:line
 }
+
+module.exports={
+  removeEmpty:removeEmpty,
+  removeTrailingcomma:removeTrailingcomma,
+  unescape:unescape,
+  combined:combined,
+  arrayify:arrayify
+};

@@ -15,9 +15,9 @@ function fetch(url)
       window.origData=request.responseText;
       try{
         JSON.parse(request.responseText);
-        console.log("Good JSON");
         document.getElementById('output').innerHTML=location.href+url;
-        removeClass(document.getElementById('step9'),"hidden");
+        err("Valid JSON!",request.responseText.slice(0,100));
+        removeClass(document.querySelector("#step2"),"hidden");
       }catch(e){
         err("Invalid JSON! \"<code>"+e.message+"</code>\"",request.responseText.slice(0,100));
         removeClass(document.querySelector("#step2"),"hidden");
@@ -65,18 +65,18 @@ function testFilters()
       {
         if(Array.isArray(newData))
         {
-          document.getElementById('filterOutBody').innerHTML+='<tr><td>'+fn+'</td><td class="ovf">'+JSON.stringify(newData).slice(0,300)+'</td></tr><tr><td></td><td>Try me:<a target="_new" href="'+location.href+window.remoteFile+'?'+fn+'">'+location.href+window.remoteFile+'?'+fn+'</a></td></tr>';
+          document.getElementById('filterOutBody').innerHTML+='<tr><td>'+fn+'</td><td class="ovf">'+JSON.stringify(newData).slice(0,300)+'</td></tr><tr><td></td><td>Try me:<a target="_blank" href="'+location.href+window.remoteFile+'?'+fn+'">'+location.href+window.remoteFile+'?'+fn+'</a></td></tr>';
           console.log("new:",newData);
         }
         else if(typeof newData === "object")
         {
-          document.getElementById('filterOutBody').innerHTML+='<tr><td>'+fn+'</td><td class="ovf">'+JSON.stringify(newData).slice(0,300)+'</td></tr><tr><td></td><td>Try me:<a target="_new" href="'+location.href+window.remoteFile+'?'+fn+'">'+location.href+window.remoteFile+'?'+fn+'</a></td></tr>';
+          document.getElementById('filterOutBody').innerHTML+='<tr><td>'+fn+'</td><td class="ovf">'+JSON.stringify(newData).slice(0,300)+'</td></tr><tr><td></td><td>Try me:<a target="_blank" href="'+location.href+window.remoteFile+'?'+fn+'">'+location.href+window.remoteFile+'?'+fn+'</a></td></tr>';
           console.log("new:",newData);
         }
         else if(typeof newData === 'string')
         {
           var realNewData=JSON.parse(newData);
-          document.getElementById('filterOutBody').innerHTML+='<tr><td>'+fn+'</td><td class="ovf">'+newData.slice(0,300)+'</td></tr><tr><td></td><td>Try me:<a target="_new" href="'+location.href+window.remoteFile+'?'+fn+'">'+location.href+window.remoteFile+'?'+fn+'</a></td></tr>';
+          document.getElementById('filterOutBody').innerHTML+='<tr><td>'+fn+'</td><td class="ovf">'+newData.slice(0,300)+'</td></tr><tr><td></td><td>Try me:<a target="_blank" href="'+location.href+window.remoteFile+'?'+fn+'">'+location.href+window.remoteFile+'?'+fn+'</a></td></tr>';
           console.log("new:",newData);
         }
       }

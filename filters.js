@@ -6,12 +6,19 @@
 function removeEmpty(data,id)
 {
   id=id||"a1";
+  var _data;
   try{
-    delete data[id];
+    if(typeof data=="string"){
+      _data=JSON.parse(data);
+    } else {
+      _data=data;
+    }
+    delete _data[id];
   } catch(e){
     console.error(e);
+    return data;
   }
-  return data;
+  return _data;
 }
 
 function removeTrailingcomma(data)

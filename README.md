@@ -4,12 +4,22 @@ This is a simple Node web-app to act as a proxy for mobile and web apps needing 
 
 ### Installation
 
-    git clone https://source.liv.ac.uk/jgilbert/t4cleaner.git
+    npm install -g t4jsoncleaner
 
-    cd t4cleaner
+### Simple Usage:
 
-    npm init
+    t4jsoncleaner -p 8080 -r http://www.mysite.ac.uk/
 
-    npm test
+### Secure usage:
 
-    npm start -p 8080
+You will need a key in .p12 format, and a simple JSON file with the passphrase (Remember to keep this secure!), e.g.
+
+file: key.json:
+
+    {
+      "passphrase":"mykeypass"
+    }
+
+Then you can run:
+
+    t4jsoncleaner -p 8443 -r https://www.mysite.ac.uk/ -k myKey.p12 -c key.json

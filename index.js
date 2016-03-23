@@ -5,9 +5,9 @@
 
 'use strict';
 
-const opts=require('commander');
-const pkg=require('./package.json');
-const serverProvider=require('./server');
+let opts=require('commander');
+let pkg=require('./package.json');
+let serverProvider=require('./server');
 
 opts
   .version(pkg.version)
@@ -17,4 +17,4 @@ opts
   .option('-c, --cred [file.json]','(optional) JSON file with credentials for key/cert')
   .parse(process.argv);
 
-const server=serverProvider.startServer(opts);
+let server=serverProvider.startServer(opts);

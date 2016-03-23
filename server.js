@@ -3,13 +3,13 @@
 
 'use strict';
 
-const fs=require('fs');
-const url=require('url');
-const https=require('https');
-const http=require('http');
-const request=require('request');
-const filters=require('./filters');
-const urlJoin=require('url-join');
+let fs=require('fs');
+let url=require('url');
+let https=require('https');
+let http=require('http');
+let request=require('request');
+let filters=require('./filters');
+let urlJoin=require('url-join');
 
 let options={};
 let server=null;
@@ -17,8 +17,7 @@ let server=null;
 function startServer(opts)
 {
   options=opts;
-  const port=opts.port||8080;
-//  options.remote=options.remote||"https://www.liverpool.ac.uk/";
+  let port=opts.port||8080;
 
   if(opts.key && opts.cred){
     console.log("Sarting secure port",port);
@@ -34,13 +33,9 @@ function startServer(opts)
 }
 
 function handler(req,resp) {
-  const inUrl=url.parse(req.url,true);
-  const file=inUrl.pathname;
-  /*try{
-    console.log(new Date(),req.connection.remoteAddress,req.header['x-forwarded-for'],file);
-  } catch(e){
-    console.log(new Date(),req.connection.remoteAddress,null,file);
-  }*/
+  let inUrl=url.parse(req.url,true);
+  let file=inUrl.pathname;
+
   resp.setHeader("Access-Control-Allow-Origin","*");
   if(file=="/" || file=="/index.html")
   {
@@ -56,7 +51,7 @@ function handler(req,resp) {
     fs.createReadStream('./browser.js').pipe(resp);
     return;
   }
-  const param=inUrl.query;
+  let param=inUrl.query;
   request(urlJoin(options.remote,file),function(err,res,data){
     if(err){
       resp.statusCode=404;

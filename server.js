@@ -69,7 +69,7 @@ function handler(req,resp) {
       if(typeof param.combined!=='undefined'){
         let origData=data;
         try{
-          data=JSON.stringify(filters.combined(data));
+          data=JSON.stringify(filters.combined(data),param.combined);
         }catch(e){
           data=origData;
         }

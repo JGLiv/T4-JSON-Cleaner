@@ -1,7 +1,7 @@
 {
-  "name": "t4cleaner",
+  "name": "t4jsoncleaner",
   "version": "0.0.1",
-  "description": "Node web-service to clean up T4 json feeds",
+  "description": "Node web-service to clean up Terminal 4 json feeds",
   "main": "index.js",
   "scripts": {
     "test": "mocha",
@@ -18,7 +18,11 @@
     "clean"
   ],
   "author": "John Gilbertson <jgilbert@liverpool.ac.uk>",
-  "license": "GPL-3.0",
+  "license": "ISC",
+  "preferGlobal": true,
+  "bin":{
+    "t4jsoncleaner":"index.js"
+  },
   "dependencies": {
     "commander": "^2.9.0",
     "url-join": "0.0.1",

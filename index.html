@@ -18,6 +18,10 @@
 
           document.querySelector("#output").innerHTML=location.href+theurl;
         }
+
+        Object.keys(module.exports).forEach(function(fn){
+          document.querySelector("#functionInfo").innerHTML+="<tr><td>"+fn+"</td><td>"+module.exports[fn].info+"</td></tr>";
+        });
       }
 
 
@@ -41,6 +45,12 @@
   <div class="step hidden" id="step9">
     <div>URL to use: <span id="output"></span></div>
   </div>
-
+  <table style="position:absolute;bottom:0px;">
+    <thead>
+      <tr><th>Function</th><th>Info</th></tr>
+    </thead>
+    <tbody id="functionInfo">
+    </tbody>
+  </table>
   </body>
 </html>

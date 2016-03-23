@@ -78,6 +78,11 @@ describe('filters', function() {
       var out='{"a123":{"text":"abc\\"\'"}}';
       assert.equal(JSON.stringify(filters.combined(input)),out);
     });
+    it("... for a given empty item",function(){
+      var input='{"a123":{"text":"abc\\"\'"},"a3":{"text":""},}';
+      var out='{"a123":{"text":"abc\\"\'"}}';
+      assert.equal(JSON.stringify(filters.combined(input,"a3")),out);
+    });
   });
 });
 

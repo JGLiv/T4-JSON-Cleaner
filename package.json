@@ -1,6 +1,6 @@
 {
   "name": "t4jsoncleaner",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Node web-service to clean up Terminal 4 json feeds",
   "main": "index.js",
   "scripts": {

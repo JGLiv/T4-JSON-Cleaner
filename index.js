@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 //jshint esnext:true
 //jshint node:true
 

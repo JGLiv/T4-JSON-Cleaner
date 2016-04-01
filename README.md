@@ -28,7 +28,7 @@ Then you can run:
 
 ## Usage
 
-Point a web browser at http://your.server:8080/ (or the https equivalent) and you'll get a very basic interface to test the various filters on your JSON file, and it will tell you the simple endpoint URL to embed in your app/page to access the data with any given filter.
+Point a web browser at http://your.server:8080/ (or the https:// equivalent) and you'll get a very basic interface to test the various filters on your JSON file, and it will tell you the simple endpoint URL to embed in your app/page to access the data with any given filter.
 
 ## Adding new filters
 

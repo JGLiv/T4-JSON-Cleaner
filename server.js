@@ -32,13 +32,19 @@ function startServer(opts)
   }
 }
 
+
+// This is the function used by http or https to respond to web requests.
 function handler(req,resp) {
   let inUrl=url.parse(req.url,true);
   let file=inUrl.pathname;
 
+  // let this get used from anywhere.
   resp.setHeader("Access-Control-Allow-Origin","*");
+
+  // Special rules for the web front-end
   if(file=="/" || file=="/index.html")
   {
+    //send the front end page.
     urlGen(req,resp);
     return;
   }
@@ -51,16 +57,22 @@ function handler(req,resp) {
     fs.createReadStream('./browser.js').pipe(resp);
     return;
   }
+
+  //
   let param=inUrl.query;
   request(urlJoin(options.remote,file),function(err,res,data){
     if(err){
       resp.statusCode=404;
       resp.end(err);
     }
+    // check to make sure we're actually working on JSON, and not being asked to retrieve other data.
     if((!file.match(/\.json$/) && !res.headers["content-type"].match(/json/g)) || res.statusCode!==200){
       resp.statusCode=404;
       resp.end("JSON files only");
     } else {
+
+      // Add new filters into this list...
+
       if(typeof param.combined!=='undefined'){
         let origData=data;
         try{
@@ -107,6 +119,7 @@ function handler(req,resp) {
   });
 }
 
+// build the index pag,e including our base URL.
 function urlGen(req,resp){
   fs.readFile("./index.html",function(err,data){
     data=data.toString().replace(/#base#/g,urlJoin(options.remote,"/"));

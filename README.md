@@ -1,5 +1,7 @@
 # T4 Cleaner
 
+[![Build Status](https://travis-ci.org/JohnGilbertson/T4-JSON-Cleaner.svg?branch=master)](https://travis-ci.org/JohnGilbertson/T4-JSON-Cleaner)
+
 This is a simple Node web-app to act as a proxy for mobile and web apps needing JSON data from Terminal 4, as it sometimes needs cleaning in various ways before being used. It won't fix every error you might see but is easily extensible.
 
 ## Installation

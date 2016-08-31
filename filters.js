@@ -29,7 +29,7 @@ function removeTrailingcomma(data)
     JSON.parse(data);
     return data;
   } catch(e){
-    if(e.message=="Unexpected token }")
+    if(e.message.match(/^Unexpected token/))
     {
       var tmp=data.slice(0,data.lastIndexOf(",")).concat(data.slice(data.lastIndexOf(',')+1,data.length));
       return tmp;

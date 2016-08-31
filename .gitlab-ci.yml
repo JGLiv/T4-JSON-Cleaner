@@ -5,6 +5,8 @@ cache:
     - node_modules/
 
 all_tests:
+  tags:
+    - node
   script:
     - npm install
     - npm test

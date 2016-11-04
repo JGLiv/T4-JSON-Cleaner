@@ -40,7 +40,7 @@ function handler(req,resp) {
 
   // let this get used from anywhere.
   resp.setHeader("Access-Control-Allow-Origin","*");
-
+  console.log(req.url);
   // Special rules for the web front-end
   if(file=="/" || file=="/index.html")
   {

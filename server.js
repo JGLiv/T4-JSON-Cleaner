@@ -72,7 +72,14 @@ function handler(req,resp) {
     } else {
 
       // Add new filters into this list...
-
+      if(typeof param.removeEmptyFromArray!=='undefined'){
+        let origData=data;
+        try{
+          data=filters.removeEmptyFromArray(data);
+        }catch(e){
+          data=origData;
+        }
+      }
       if(typeof param.combined!=='undefined'){
         let origData=data;
         try{

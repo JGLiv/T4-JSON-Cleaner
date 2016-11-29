@@ -84,6 +84,12 @@ describe('filters', function() {
       assert.equal(JSON.stringify(filters.combined(input,"a3")),out);
     });
   });
+  describe("Remove any empty object",function(){
+    it("Removes an empty object from an array",function(){
+      let input=JSON.stringify([{a:true},{}]);
+      assert.equal(filters.removeEmptyFromArray(input),"[{\"a\":true}]");
+    });
+  });
 });
 
 describe('Server',function(){

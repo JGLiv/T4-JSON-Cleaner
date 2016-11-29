@@ -23,6 +23,12 @@ function removeEmpty(data,id)
 
 removeEmpty.info="Removes an empty JSON object within an object if placeholders have been added. Usage: /file/to/convert.json?removeEmpty=item to remove 'item' ";
 
+function removeEmptyFromArray(data){
+  let tmp= data.replace(/,[\s]*\{\}/g,"");
+  return tmp.replace(/\{\}/g,"");
+}
+removeEmptyFromArray.info="Remove any blank object without an id.";
+
 function removeTrailingcomma(data)
 {
   try{
@@ -72,6 +78,7 @@ if(typeof module == "undefined"){
 
 module.exports={
   removeEmpty:removeEmpty,
+  removeEmptyFromArray:removeEmptyFromArray,
   removeTrailingcomma:removeTrailingcomma,
   unescape:unescape,
   combined:combined,

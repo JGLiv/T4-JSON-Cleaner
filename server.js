@@ -70,7 +70,10 @@ function handler(req,resp) {
       resp.statusCode=404;
       resp.end("JSON files only");
     } else {
-
+      let keys=Object.keys(res.headers);
+      for(let key of keys){
+        resp.setHeader(key,res.headers[key]);
+      }
       // Add new filters into this list...
       if(typeof param.removeEmptyFromArray!=='undefined'){
         let origData=data;

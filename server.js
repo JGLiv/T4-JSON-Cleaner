@@ -74,7 +74,9 @@ function handler(req,resp) {
     } else {
       let keys=Object.keys(res.headers);
       for(let key of keys){
-        resp.setHeader(key,res.headers[key]);
+        if(key!="Content-length"){}
+          resp.setHeader(key,res.headers[key]);
+        }
       }
       // Add new filters into this list...
       if(typeof param.removeEmptyFromArray!=='undefined'){

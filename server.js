@@ -126,7 +126,7 @@ function handler(req,resp) {
         }
       }
       resp.setHeader("Content-type","application/json");
-      resp.setHeader("Connection","close");
+      //resp.setHeader("Connection","close");
       resp.write(data);
       resp.end();
 

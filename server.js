@@ -126,8 +126,9 @@ function handler(req,resp) {
         }
       }
       resp.setHeader("Content-type","application/json");
-      resp.end(data);
-      resp.setTimeout(500);
+      resp.write(data);
+      resp.end();
+
     }
   });
 }

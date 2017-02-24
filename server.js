@@ -74,7 +74,7 @@ function handler(req,resp) {
     } else {
       let keys=Object.keys(res.headers);
       for(let key of keys){
-        if(key!="Content-length"){
+        if(!key.match(/.*ontent-length/)){
           resp.setHeader(key,res.headers[key]);
         }
       }

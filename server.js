@@ -64,11 +64,13 @@ function handler(req,resp) {
     if(err){
       resp.statusCode=404;
       resp.end(err);
+      return;
     }
     // check to make sure we're actually working on JSON, and not being asked to retrieve other data.
     if((!file.match(/\.json$/) && !res.headers["content-type"].match(/json/g)) || res.statusCode!==200){
       resp.statusCode=404;
       resp.end("JSON files only");
+      return;
     } else {
       let keys=Object.keys(res.headers);
       for(let key of keys){
@@ -125,6 +127,7 @@ function handler(req,resp) {
       }
       resp.setHeader("Content-type","application/json");
       resp.end(data);
+      resp.setTimeout(500);
     }
   });
 }

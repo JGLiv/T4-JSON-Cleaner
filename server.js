@@ -38,6 +38,11 @@ function handler(req,resp) {
   let inUrl=url.parse(req.url,true);
   let file=inUrl.pathname;
 
+  if(req.url.match(/^\/server-ok/)){
+    resp.end("OK");
+    return;
+  }
+
   // let this get used from anywhere.
   resp.setHeader("Access-Control-Allow-Origin","*");
   console.log(req.url);

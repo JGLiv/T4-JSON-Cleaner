@@ -43,6 +43,7 @@ function handler(req,resp) {
   }
 
   req.url=req.url.replace(/^\/\//,"/");
+  req.url=req.url.replace(/^\/t4cleaner\//,"/");
   let inUrl=url.parse(req.url,true);
   let file=inUrl.pathname;
   // let this get used from anywhere.

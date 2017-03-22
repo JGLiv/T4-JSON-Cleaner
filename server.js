@@ -35,8 +35,7 @@ function startServer(opts)
 
 // This is the function used by http or https to respond to web requests.
 function handler(req,resp) {
-  let inUrl=url.parse(req.url,true);
-  let file=inUrl.pathname;
+
 
   if(req.url.match(/^\/server-ok/)){
     resp.end("OK");
@@ -44,7 +43,8 @@ function handler(req,resp) {
   }
 
   req.url=req.url.replace(/^\/\//,"/");
-
+  let inUrl=url.parse(req.url,true);
+  let file=inUrl.pathname;
   // let this get used from anywhere.
   resp.setHeader("Access-Control-Allow-Origin","*");
   console.log(req.url);

@@ -43,6 +43,8 @@ function handler(req,resp) {
     return;
   }
 
+  req.url=req.url.replace(/^\/\//,"/");
+
   // let this get used from anywhere.
   resp.setHeader("Access-Control-Allow-Origin","*");
   console.log(req.url);

@@ -135,7 +135,7 @@ function handler(req,resp) {
           data=origData;
         }
       }
-      resp.setHeader("Content-type","application/json");
+      resp.setHeader("Content-type","application/json; charset=utf-8");
       //resp.setHeader("Connection","close");
       resp.write(data);
       resp.end();

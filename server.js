@@ -70,8 +70,10 @@ function handler(req,resp) {
   let param=inUrl.query;
   request(urlJoin(options.remote,file),function(err,res,data){
     if(err){
+      console.error("Unable to get file",file,"error",err);
       resp.statusCode=404;
-      resp.end(err);
+      //err.internal="No file";
+      resp.end(JSON.stringify(err));
       return;
     }
     // check to make sure we're actually working on JSON, and not being asked to retrieve other data.
